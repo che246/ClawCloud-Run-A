@@ -12,12 +12,15 @@ jobs:
   auto-login:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 设置时区为中国时间
+        run: sudo timedatectl set-timezone Asia/Shanghai
 
       - name: 设置 Python
         uses: actions/setup-python@v5
@@ -39,7 +42,7 @@ jobs:
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
           REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: python scripts/auto_login.py
-        
+
 #      - name: 私有仓库 Actions 保活
 #        run: |
 #          git config --local user.email "github-actions[bot]@users.noreply.github.com"
