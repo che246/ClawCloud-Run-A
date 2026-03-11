@@ -82,7 +82,7 @@ class Telegram:
     
     def wait_code(self, timeout=120):
         """
-        等待你在 TG 里发 /code 123456
+        等待你在 TG 里发 /c 123456
         只接受来自 TG_CHAT_ID 的消息
         """
         if not self.ok:
@@ -91,7 +91,7 @@ class Telegram:
         # 先刷新 offset，避免读到旧的 /code
         offset = self.flush_updates()
         deadline = time.time() + timeout
-        pattern = re.compile(r"^/code\s+(\d{6,8})$")  # 6位TOTP 或 8位恢复码也行
+        pattern = re.compile(r"^/c\s+(\d{6,8})$")  # 6位TOTP 或 8位恢复码也行
         
         while time.time() < deadline:
             try:
@@ -386,7 +386,7 @@ class AutoLogin:
         return False
     
     def handle_2fa_code_input(self, page):
-        """处理 TOTP 验证码输入（通过 Telegram 发送 /code 123456）"""
+        """处理 TOTP 验证码输入（通过 Telegram 发送 /c 123456）"""
         self.log("需要输入验证码", "WARN")
         shot = self.shot(page, "两步验证_code")
 
@@ -441,7 +441,7 @@ class AutoLogin:
         self.tg.send(f"""🔐 <b>需要验证码登录</b>
 
 用户{self.username}正在登录，请在 Telegram 里发送：
-<code>/code 你的6位验证码</code>
+<code>/c 你的6位验证码</code>
 
 等待时间：{TWO_FACTOR_WAIT} 秒""")
         if shot:
